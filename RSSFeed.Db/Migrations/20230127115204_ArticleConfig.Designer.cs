@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RSSFeed.Db;
 
@@ -10,9 +11,11 @@ using RSSFeed.Db;
 namespace RSSFeed.Db.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230127115204_ArticleConfig")]
+    partial class ArticleConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
@@ -28,7 +31,9 @@ namespace RSSFeed.Db.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("SubscriptionDate")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 1, 27, 13, 52, 3, 977, DateTimeKind.Local).AddTicks(2058));
 
                     b.Property<string>("Url")
                         .IsRequired()
