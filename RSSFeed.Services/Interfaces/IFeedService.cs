@@ -7,6 +7,6 @@ namespace RSSFeed.Services.Interfaces
         Task AddArticleAsync(string url, CancellationToken cancellationToken);
         Task<IEnumerable<Article>> GetArticleListAsync(CancellationToken cancellationToken);
         Task<IEnumerable<Article>> GetArticleListByDateAsync(DateTime date, CancellationToken cancellationToken);
-        Task ReadArticleAsync(Article article, CancellationToken cancellationToken);
+        Task ReadArticleAsync(int articleId, CancellationToken cancellationToken);
     }
 }

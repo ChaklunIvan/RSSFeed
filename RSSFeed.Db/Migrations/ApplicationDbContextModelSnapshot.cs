@@ -28,7 +28,7 @@ namespace RSSFeed.Db.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("SubscriptionDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("date");
 
                     b.Property<string>("Url")
                         .IsRequired()

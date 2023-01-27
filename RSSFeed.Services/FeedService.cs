@@ -1,5 +1,8 @@
-﻿using RSSFeed.Db;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using RSSFeed.Db;
 using RSSFeed.Models.Entities;
+using RSSFeed.Models.Enums;
 using RSSFeed.Services.Interfaces;
 
 namespace RSSFeed.Services
@@ -7,30 +10,46 @@ namespace RSSFeed.Services
     public class FeedService : IFeedService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public FeedService(ApplicationDbContext context)
+        public FeedService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public Task AddArticleAsync(string url, CancellationToken cancellationToken)
+        public async Task AddArticleAsync(string url, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var article = new Article
+            {
+                Url = url,
+                State = StateType.Unread,
+                SubscriptionDate = DateTime.Now
+            };
+
+            await _context.AddAsync(article, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<IEnumerable<Article>> GetArticleListAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Article>> GetArticleListAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _context.Articles.ToListAsync(cancellationToken);
         }
 
-        public Task<IEnumerable<Article>> GetArticleListByDateAsync(DateTime date, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Article>> GetArticleListByDateAsync(DateTime date, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _context.Articles.Where(a => a.SubscriptionDate.ToShortDateString() == date.ToShortDateString()).ToListAsync(cancellationToken);
         }
 
-        public Task ReadArticleAsync(Article article, CancellationToken cancellationToken)
+        public async Task ReadArticleAsync(int articleId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var article = await _context.Articles.FindAsync(articleId, cancellationToken);
+            if(article != null)
+            {
+                article.State = StateType.Read;
+                _context.Articles.Update(article);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
         }
     }
 }

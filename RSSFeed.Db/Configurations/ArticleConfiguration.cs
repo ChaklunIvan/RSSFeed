@@ -18,6 +18,7 @@ namespace RSSFeed.Db.Configurations
                 .IsRequired();
 
             builder.Property(a => a.SubscriptionDate)
+                .HasColumnType("date")
                 .IsRequired();
 
             builder.Property(a => a.State)

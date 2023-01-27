@@ -11,8 +11,8 @@ using RSSFeed.Db;
 namespace RSSFeed.Db.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230127115343_SmallFix")]
-    partial class SmallFix
+    [Migration("20230127125714_ChangeDate")]
+    partial class ChangeDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,8 +30,8 @@ namespace RSSFeed.Db.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("SubscriptionDate")
-                        .HasColumnType("TEXT");
+                    b.Property<DateOnly>("SubscriptionDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Url")
                         .IsRequired()
