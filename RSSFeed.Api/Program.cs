@@ -5,7 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 //Configure services
 builder.Services.AddControllers()
        .Services.AddSwaggerGenerator()
-       .ConfigureSqliteContext(builder.Configuration);
+       .ConfigureSqliteContext(builder.Configuration)
+       .AddServiceConfiguration();
 
 var app = builder.Build();
 

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RSSFeed.Db\RSSFeed.Db.csproj" />
+    <ProjectReference Include="..\RSSFeed.Models\RSSFeed.Models.csproj" />
+  </ItemGroup>
+
 </Project>

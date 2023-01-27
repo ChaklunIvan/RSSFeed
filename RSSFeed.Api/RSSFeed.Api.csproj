@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RSSFeed.Db\RSSFeed.Db.csproj" />
     <ProjectReference Include="..\RSSFeed.Models\RSSFeed.Models.csproj" />
+    <ProjectReference Include="..\RSSFeed.Services\RSSFeed.Services.csproj" />
   </ItemGroup>
 
 </Project>
