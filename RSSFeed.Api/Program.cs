@@ -7,7 +7,8 @@ builder.Services.AddControllers()
        .Services.AddSwaggerGenerator()
        .ConfigureSqliteContext(builder.Configuration)
        .AddServiceConfiguration()
-       .AddAutoMapper(typeof(Program));
+       .AddAutoMapper(typeof(Program))
+       .ConfigureIdentity();
 
 var app = builder.Build();
 
@@ -22,6 +23,11 @@ app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
