@@ -27,8 +27,7 @@ namespace RSSFeed.Services
                 SubscriptionDate = DateTime.Now
             };
 
-            await _context.AddAsync(article, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            var result = await _context.AddAsync(article, cancellationToken);
         }
 
         public async Task<IEnumerable<Article>> GetArticleListAsync(CancellationToken cancellationToken)
