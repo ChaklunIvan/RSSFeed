@@ -3,7 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using RSSFeed.Db;
 using RSSFeed.Models.Entities;
 using RSSFeed.Models.Enums;
+using RSSFeed.Models.Pagination;
+using RSSFeed.Services.Extensions;
 using RSSFeed.Services.Interfaces;
+using System.Security.Cryptography;
 
 namespace RSSFeed.Services
 {
@@ -31,18 +34,21 @@ namespace RSSFeed.Services
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Article>> GetArticleListAsync(CancellationToken cancellationToken)
+        public Task<PagedModel<Article>> GetArticleListAsync(PagingSettings pagingSettings, CancellationToken cancellationToken)
         {
-            return await _context.Articles.ToListAsync(cancellationToken);
+            var articles = _context.Articles.ToPagedListAsync(pagingSettings);
+
+            return articles;
         }
 
-        public async Task<IEnumerable<Article>> GetArticleListByDateAsync(DateTime date, CancellationToken cancellationToken)
+        public Task<PagedModel<Article>> GetArticleListByDateAsync(DateTime date, PagingSettings pagingSettings, CancellationToken cancellationToken)
         {
-            return await _context.Articles.Where(a => a.SubscriptionDate.Day == date.Day
-                                                 && a.SubscriptionDate.Month == date.Month
-                                                 && a.SubscriptionDate.Year == date.Year
-                                                 && a.State == StateType.Unread)
-                                           .ToListAsync(cancellationToken);
+            var articles = _context.Articles.Where(a => a.SubscriptionDate.Day == date.Day
+                                                     && a.SubscriptionDate.Month == date.Month
+                                                     && a.SubscriptionDate.Year == date.Year
+                                                     && a.State == StateType.Unread)
+                                            .ToPagedListAsync(pagingSettings);
+            return articles;
         }
 
         public async Task ReadArticleAsync(int articleId, CancellationToken cancellationToken)

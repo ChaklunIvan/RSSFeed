@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RSSFeed.Models.Entities;
+using RSSFeed.Models.Pagination;
 using RSSFeed.Services.Interfaces;
 
 namespace RSSFeed.Api.Controllers
@@ -25,18 +26,18 @@ namespace RSSFeed.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> GetActiveFeeds(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Article>>> GetActiveFeeds([FromQuery] PagingSettings pagingSettings, CancellationToken cancellationToken)
         {
-            var articles = await _service.GetArticleListAsync(cancellationToken);
+            var articles = await _service.GetArticleListAsync(pagingSettings, cancellationToken);
 
             return Ok(articles);
         }
 
         [HttpGet("{date}")]
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetUnreadFeedsByDate([FromRoute] DateTime date, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Article>>> GetUnreadFeedsByDate([FromRoute] DateTime date, [FromQuery] PagingSettings pagingSettings, CancellationToken cancellationToken)
         {
-            var articles = await _service.GetArticleListByDateAsync(date, cancellationToken);
+            var articles = await _service.GetArticleListByDateAsync(date, pagingSettings, cancellationToken);
 
             return Ok(articles);
         }
