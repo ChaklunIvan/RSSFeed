@@ -38,7 +38,10 @@ namespace RSSFeed.Services
 
         public async Task<IEnumerable<Article>> GetArticleListByDateAsync(DateTime date, CancellationToken cancellationToken)
         {
-            return await _context.Articles.Where(a => a.SubscriptionDate.ToShortDateString() == date.ToShortDateString()).ToListAsync(cancellationToken);
+            return await _context.Articles.Where(a => a.SubscriptionDate.Day == date.Day
+                                                 && a.SubscriptionDate.Month == date.Month
+                                                 && a.SubscriptionDate.Year == date.Year)
+                                           .ToListAsync(cancellationToken);
         }
 
         public async Task ReadArticleAsync(int articleId, CancellationToken cancellationToken)

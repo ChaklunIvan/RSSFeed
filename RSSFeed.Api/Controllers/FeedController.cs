@@ -32,9 +32,9 @@ namespace RSSFeed.Api.Controllers
             return Ok(articles);
         }
 
-        [HttpGet("date")]
+        [HttpGet("{date}")]
 
-        public async Task<ActionResult<IEnumerable<Article>>> GetUnreadFeedsByDate([FromQuery] DateTime date, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Article>>> GetUnreadFeedsByDate([FromRoute] DateTime date, CancellationToken cancellationToken)
         {
             var articles = await _service.GetArticleListByDateAsync(date, cancellationToken);
 
