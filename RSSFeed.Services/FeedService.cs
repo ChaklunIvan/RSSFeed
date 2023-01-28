@@ -27,7 +27,8 @@ namespace RSSFeed.Services
                 SubscriptionDate = DateTime.Now
             };
 
-            var result = await _context.AddAsync(article, cancellationToken);
+            await _context.AddAsync(article, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Article>> GetArticleListAsync(CancellationToken cancellationToken)
@@ -39,7 +40,8 @@ namespace RSSFeed.Services
         {
             return await _context.Articles.Where(a => a.SubscriptionDate.Day == date.Day
                                                  && a.SubscriptionDate.Month == date.Month
-                                                 && a.SubscriptionDate.Year == date.Year)
+                                                 && a.SubscriptionDate.Year == date.Year
+                                                 && a.State == StateType.Unread)
                                            .ToListAsync(cancellationToken);
         }
 
