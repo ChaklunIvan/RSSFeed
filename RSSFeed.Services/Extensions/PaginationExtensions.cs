@@ -6,21 +6,29 @@ namespace RSSFeed.Services.Extensions
 {
     public static class PaginationExtensions
     {
-        public static Task<PagedModel<TModel>> ToPagedListAsync<TModel>(this IQueryable<TModel> items, PagingSettings pagingSettings)
+        public static Task<IQueryable<TModel>> ToPagedListAsync<TModel>(this IQueryable<TModel> items, PagingSettings pagingSettings)
         {
-            var count = items.Count();
             var pagedList = items.Skip((pagingSettings.CurrentPage - 1) * pagingSettings.PageSize)
                                  .Take(pagingSettings.PageSize);
+
+            
+            return Task.FromResult(pagedList);
+        }
+
+        public static Task<PagedModel<TModel>> ToPagedModelAsync<TModel>(this IEnumerable<TModel> items, PagingSettings pagingSettings)
+        {
+            var count = items.Count();
 
             var pagedModel = new PagedModel<TModel>()
             {
                 CurrentPage = pagingSettings.CurrentPage,
                 PageSize = pagingSettings.PageSize,
-                Items = pagedList,
+                Items = items,
                 TotalCount = count,
                 TotalPages = (int)Math.Ceiling(count / (double)pagingSettings.PageSize)
             };
+
             return Task.FromResult(pagedModel);
-        }
+        } 
     }
 }

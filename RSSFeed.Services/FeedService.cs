@@ -4,6 +4,7 @@ using RSSFeed.Db;
 using RSSFeed.Models.Entities;
 using RSSFeed.Models.Enums;
 using RSSFeed.Models.Pagination;
+using RSSFeed.Models.Responses;
 using RSSFeed.Services.Extensions;
 using RSSFeed.Services.Interfaces;
 using System.Security.Cryptography;
@@ -34,21 +35,30 @@ namespace RSSFeed.Services
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<PagedModel<Article>> GetArticleListAsync(PagingSettings pagingSettings, CancellationToken cancellationToken)
+        public async Task<PagedModel<ArticleResponse>> GetArticleListAsync(PagingSettings pagingSettings, CancellationToken cancellationToken)
         {
-            var articles = _context.Articles.ToPagedListAsync(pagingSettings);
+            var articles = await _context.Articles.ToPagedListAsync(pagingSettings);
 
-            return articles;
+            var articlesResponse = _mapper.Map<IEnumerable<ArticleResponse>>(articles);
+
+            var pagedArticles = await articlesResponse.ToPagedModelAsync(pagingSettings);
+
+            return pagedArticles;
         }
 
-        public Task<PagedModel<Article>> GetArticleListByDateAsync(DateTime date, PagingSettings pagingSettings, CancellationToken cancellationToken)
+        public async Task<PagedModel<ArticleResponse>> GetArticleListByDateAsync(DateTime date, PagingSettings pagingSettings, CancellationToken cancellationToken)
         {
-            var articles = _context.Articles.Where(a => a.SubscriptionDate.Day == date.Day
+            var articles = await _context.Articles.Where(a => a.SubscriptionDate.Day == date.Day
                                                      && a.SubscriptionDate.Month == date.Month
                                                      && a.SubscriptionDate.Year == date.Year
                                                      && a.State == StateType.Unread)
-                                            .ToPagedListAsync(pagingSettings);
-            return articles;
+                                                  .ToPagedListAsync(pagingSettings);
+            
+            var articlesResponse = _mapper.Map<IEnumerable<ArticleResponse>>(articles);
+
+            var pagedArticles = await articlesResponse.ToPagedModelAsync(pagingSettings);
+
+            return pagedArticles;
         }
 
         public async Task ReadArticleAsync(int articleId, CancellationToken cancellationToken)

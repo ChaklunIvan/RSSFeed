@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RSSFeed.Models.Entities;
+using RSSFeed.Models.Responses;
 
 namespace RSSFeed.Api.Mapper
 {
@@ -7,6 +8,7 @@ namespace RSSFeed.Api.Mapper
     {
         public ArticleMapperProfile()
         {
+            CreateMap<Article, ArticleResponse>();
         }
     }
 }
