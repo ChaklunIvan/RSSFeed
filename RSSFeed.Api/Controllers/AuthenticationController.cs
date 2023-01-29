@@ -19,9 +19,9 @@ namespace RSSFeed.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Authenticate([FromBody] AuthenticationRequest authenticationRequest)
         {
-            var result = await _authenticationService.ValidateUserAsync(authenticationRequest);
+            var user = await _authenticationService.ValidateUserAsync(authenticationRequest);
 
-            return Ok(result);
+            return Ok(new { Token = await _authenticationService.CreateTokenAsync(user) });
         }
     }
 }

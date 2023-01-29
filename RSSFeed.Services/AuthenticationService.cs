@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using RSSFeed.Models.Constans;
 using RSSFeed.Models.Entities;
 using RSSFeed.Models.Requests;
+using RSSFeed.Services.Extensions;
 using RSSFeed.Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace RSSFeed.Services
 {
@@ -17,10 +22,35 @@ namespace RSSFeed.Services
             _configuration = configuration;
         }
 
-        public async Task<bool> ValidateUserAsync(AuthenticationRequest authenticationRequest)
+        public async Task<User> ValidateUserAsync(AuthenticationRequest authenticationRequest)
         {
             var user = await _userManager.FindByNameAsync(authenticationRequest.UserName);
-            return await _userManager.CheckPasswordAsync(user, authenticationRequest.Password);
+            var verifyPassword = await _userManager.CheckPasswordAsync(user, authenticationRequest.Password);
+
+            if(verifyPassword == false)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return user;
+        }
+
+        public async Task<string> CreateTokenAsync(User user)
+        {
+            var signingCredentials = GetSigningCredentials();
+            var claims = user.GetClaims(await _userManager.GetRolesAsync(user));
+            var tokenOptions = signingCredentials.GenerateTokenOptions(claims, _configuration);
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+
+        private SigningCredentials GetSigningCredentials()
+        {
+            var jwtSettings = _configuration.GetSection(JwtConstans.JwtSettings);
+            var key = Encoding.UTF8.GetBytes(jwtSettings.GetSection(JwtConstans.Key).Value);
+            var secret = new SymmetricSecurityKey(key);
+
+            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
     }
 }

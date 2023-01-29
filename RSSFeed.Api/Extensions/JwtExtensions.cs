@@ -11,7 +11,7 @@ namespace RSSFeed.Api.Extensions
         public static IServiceCollection ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection(JwtConstans.JwtSettings);
-            var secretKey = configuration.GetSection(JwtConstans.Key);
+            var secretKey = jwtSettings.GetSection(JwtConstans.Key).Value;
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt =>
@@ -24,7 +24,7 @@ namespace RSSFeed.Api.Extensions
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = jwtSettings.GetSection(JwtConstans.Issuer).Value,
                             ValidAudience = jwtSettings.GetSection(JwtConstans.Audience).Value,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey.Value))
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
 
                         };
                     });

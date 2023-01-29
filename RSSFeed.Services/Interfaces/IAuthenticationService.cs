@@ -1,9 +1,11 @@
-﻿using RSSFeed.Models.Requests;
+﻿using RSSFeed.Models.Entities;
+using RSSFeed.Models.Requests;
 
 namespace RSSFeed.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<bool> ValidateUserAsync(AuthenticationRequest authenticationRequest);
+        Task<User> ValidateUserAsync(AuthenticationRequest authenticationRequest);
+        Task<string> CreateTokenAsync(User user);
     }
 }
