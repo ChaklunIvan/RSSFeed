@@ -11,8 +11,8 @@ using RSSFeed.Db;
 namespace RSSFeed.Db.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230128145750_AddIdentity")]
-    partial class AddIdentity
+    [Migration("20230129100656_Identity")]
+    partial class Identity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -8,8 +8,8 @@ namespace RSSFeed.Api.Extensions
     {
         public static IServiceCollection ConfigureIdentity(this IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;
         }
