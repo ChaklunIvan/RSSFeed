@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using RSSFeed.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,8 @@ builder.Services.AddControllers()
        .ConfigureSqliteContext(builder.Configuration)
        .AddServiceConfiguration()
        .AddAutoMapper(typeof(Program))
-       .ConfigureIdentity();
+       .ConfigureIdentity()
+       .ConfigureJwt(builder.Configuration);
 
 var app = builder.Build();
 

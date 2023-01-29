@@ -9,6 +9,7 @@ namespace RSSFeed.Api.Extensions
         {
             services.AddScoped<IFeedService, FeedService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;
         }

@@ -20,7 +20,7 @@ namespace RSSFeed.Services
         public async Task CreateUserAsync(RegisterRequest registerRequest) 
         {
             var user = _mapper.Map<User>(registerRequest);
-            await _userManager.CreateAsync(user);
+            await _userManager.CreateAsync(user, registerRequest.Password);
         }
     }
 }

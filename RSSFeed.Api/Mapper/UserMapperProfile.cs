@@ -10,14 +10,8 @@ namespace RSSFeed.Api.Mapper
     {
         public UserMapperProfile()
         {
-            CreateMap<RegisterRequest, User>().ForMember(mem => mem.PasswordHash, opt => opt.MapFrom(u => HashPassword(u.Password)));
+            CreateMap<RegisterRequest, User>();
         }
 
-        private string HashPassword(string password)
-        {
-            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
-            var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
-            return hash;
-        }
     }
 }
